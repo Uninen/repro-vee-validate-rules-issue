@@ -17,6 +17,7 @@
   "dependencies": {
     "@vueuse/head": "2.0.0",
     "pinia": "2.1.7",
+    "vee-validate": "^4.12.4",
     "vue": "3.4.0",
     "vue-router": "4.2.5"
   },

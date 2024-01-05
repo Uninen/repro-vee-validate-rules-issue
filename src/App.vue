@@ -1,4 +1,27 @@
 <script setup lang="ts">
+import { Field, Form, ErrorMessage } from 'vee-validate'
+
+/**
+ * Simulates an API request
+ */
+const mockApiRequest = (value: string) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(value === 'test@example.com')
+    }, 1000)
+  })
+}
+
+function onSubmit(values: any) {
+  alert(JSON.stringify(values, null, 2))
+}
+
+async function validateEmail(value: string) {
+  const result = await mockApiRequest(value)
+
+  return result ? true : 'This email is already taken'
+}
+
 // See vite.config.ts for details about automatic imports
 const route = useRoute()
 
@@ -31,14 +54,21 @@ const thisYear = new Date().getFullYear()
       class="container relative max-w-2xl mx-auto bg-white shadow-xl shadow-slate-700/10 ring-1 ring-gray-900/5"
     >
       <header class="px-4 pt-6 prose-sm md:px-6 md:prose">
-        <h1>Vite + Vue 3 + TypeScript + Tailwind + Playwright Starter Template v{{ VERSION }}</h1>
-        <p class="pb-4 text-xl leading-relaxed tracking-wide text-gray-700">
-          Opinionated, production ready template for Vite and Vue 3. MIT licensed,
-          <a href="https://github.com/Uninen/vite-ts-tailwind-starter">available on GitHub</a>.
-        </p>
+        <h1>vee-validate TS issue</h1>
+        <p class="pb-4 text-xl leading-relaxed tracking-wide text-gray-700"> Error: </p>
+        <p
+          >Type '(value: string) =&gt; Promise&lt;true | &quot;This email is already
+          taken&quot;&gt;' is not assignable to type 'RuleExpression&lt;unknown&gt;'.ts(2322)</p
+        >
       </header>
       <main>
-        <router-view></router-view>
+        <Form @submit="onSubmit">
+          <label for="email">Email</label>
+          <Field id="email" name="email" :rules="validateEmail" type="email" />
+          <ErrorMessage name="email" />
+
+          <button type="submit">Submit</button>
+        </Form>
       </main>
       <footer class="py-6 text-sm text-center text-gray-700">
         <p>
